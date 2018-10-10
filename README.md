@@ -1,15 +1,16 @@
 # Slcanuino
 
-This is an Arduino sketch which makes a CAN-BUS shield into a CAN-USB adapter for Linux SocketCAN(can-utils). Library files under Canbus folder originaly comes from 'CAN-BUS ECU Reader demo sketch v4' on skpang and were modified. The files should be copied under ~/Arduino/libraries/ to compile the sketch file:'slcan.ino'.
+Original repo: https://github.com/kahiroka/slcanuino
 
-http://skpang.co.uk/catalog/arduino-canbus-shield-with-usd-card-holder-p-706.html
+This is an Arduino sketch which makes an Arduino recieving serialized CAN traffic over LoRa wireless into a CAN-USB adapter for Linux SocketCAN(can-utils). Library files under Canbus folder originaly comes from 'CAN-BUS ECU Reader demo sketch v4' on skpang and were modified. The files should be copied under ~/Arduino/libraries/ to compile the sketch file:'slcan.ino'.
+
 
 
 # Supported hardware
 
-I tested this sketch on the following 'CAN-BUS Shield'.
-
-https://www.sparkfun.com/products/10039
+Tested using the following LoRa shield and CAN bus adapter (for transmission):
+http://www.dragino.com/products/module/item/102-lora-shield.html
+http://wiki.seeedstudio.com/CAN-BUS_Shield_V1.2/
 
 
 # How to use
@@ -24,8 +25,8 @@ Burn your Arduino with this and install can-utils for your linux environment in 
 
 ## Setup
 
-    $ sudo slcan_attach -f -s6 -o /dev/ttyUSB0  
-    $ sudo slcand -S 1000000 ttyUSB0 can0  
+    $ sudo slcan_attach -f -s5 -o /dev/ttyUSB0  
+    $ sudo slcand -S 500000 ttyUSB0 can0  
     $ sudo ifconfig can0 up  
 
 then,
