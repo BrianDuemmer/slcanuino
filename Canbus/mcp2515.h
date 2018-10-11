@@ -41,7 +41,7 @@ extern "C"
 
 #endif
 // ----------------------------------------------------------------------------
-typedef struct
+/*typedef struct
 {
 	uint16_t id;
 	uint16_t ide;
@@ -51,7 +51,10 @@ typedef struct
 		uint8_t length : 4;
 	} header;
 	uint8_t data[8];
-} tCAN;
+} tCAN;*/
+
+// Moved this outside so it could be used with Lora code
+#include "tCan.h"
 
 // ----------------------------------------------------------------------------
 uint8_t spi_putc( uint8_t data );
