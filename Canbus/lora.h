@@ -3,6 +3,7 @@
 
 #include <stdint.h>
 #include "tCan.h"
+#include "CanbusBase.h"
 #include <RH_RF95>
 
 extern RH_RF95 rf95;
@@ -18,6 +19,7 @@ extern RH_RF95 rf95;
 #define LORA_CODE_RATE 1
 #define LORA_TX_POWER 20
 #define LORA_PREAMBLE 12
+#define LORA_FREQ 915.0
 
 /**Parameters for CAN serialization*/
 // bytes / frame
@@ -33,27 +35,26 @@ extern RH_RF95 rf95;
 #define LORA_MSG_INITIALIZER '~'
 
 // Size of a serialized CAN frame
-#define CAN_PACKET_SIZE 6
+#define CAN_PACKET_SIZE 18
 
 
+class LoraCanbus : public CanbusBase {
+	private:
+		RH_RF95 rf95(LORA_PIN_NSS, LORA_PIN_INT);
+		uint8_t tx_buf[CAN_PACKET_SIZE];
+		uint8_t rx_buf[CAN_PACKET_SIZE];
+	
+	public:	
+		// Populates buf with a base64 encoded / serialized representation of tCan
+		void serialize(tCan *frame, uint8_t *buf);
 
-#ifdef __cplusplus
-extern "C"
-{
-#endif
+		// Attempts to decode the serialized frame in buf to a tCan object.
+		// Returns 1 if the data in buf was decoded successfully, 0 on an error
+		uint8_t deserialize(tCan *frame, uint8_t *buf)
 
-// Populates buf with a base64 encoded / serialized representation of tCan
-void serialize(tCan *frame, uint8_t *buf);
-
-// Attempts to decode the serialized frame in buf to a tCan object.
-// Returns 1 if the data in buf was decoded successfully, 0 on an error
-uint8_t deserialize(tCan *frame, uint8_t *buf)
-
-// Starts up LoRa and configures it for operation in the system
-uint8_t initLora();
-
-#ifdef __cplusplus
+		// Starts up LoRa and configures it for operation in the system
+		uint8_t init();
 }
-#endif
+
 
 #endif // LORA_H

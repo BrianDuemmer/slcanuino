@@ -6,7 +6,6 @@
 #include "tCan.h"
 #include "lora.h"
 
-RH_RF95 rf95(LORA_PIN_NSS, LORA_PIN_INT);
 
 // Serializes a CAN frame into a lora-ready format. Format is as follows:
 // b0 => start of packet indicator

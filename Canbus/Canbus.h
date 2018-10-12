@@ -24,7 +24,7 @@
 #define PID_REQUEST         0x7DF
 #define PID_REPLY			0x7E8
 
-class CanbusClass
+class CanbusClass : public CanbusBase
 {
   public:
 
@@ -39,7 +39,5 @@ class CanbusClass
 private:
 	
 };
-extern CanbusClass Canbus;
-//extern tCAN message;
 
 #endif
