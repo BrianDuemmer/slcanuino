@@ -6,10 +6,9 @@
 #include "CanbusBase.h"
 #include <RH_RF95>
 
-extern RH_RF95 rf95;
 
-#define LORA_PIN_NSS 10
-#define LORA_PIN_INT 3
+#define LORA_PIN_NSS 5
+#define LORA_PIN_INT 2
 
 // Need to calibrate these to optimal data rate / transmission range.
 // Calculated based off the RF95 datasheet in combination with the
@@ -42,7 +41,7 @@ class LoraCanbus : public CanbusBase {
 	private:
 		RH_RF95 rf95(LORA_PIN_NSS, LORA_PIN_INT);
 		uint8_t tx_buf[CAN_PACKET_SIZE];
-		uint8_t rx_buf[CAN_PACKET_SIZE];
+		uint8_t rx_buf[RH_RF95_MAX_MESSAGE_LEN];
 	
 	public:	
 		// Populates buf with a base64 encoded / serialized representation of tCan
