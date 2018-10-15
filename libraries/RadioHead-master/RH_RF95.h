@@ -682,7 +682,7 @@ public:
     virtual bool    sleep();
 	
 	/// Returns the Signal to Noise ratio (multiplied by 4) of the last recieved packet
-	int				lastSNR();
+	// uint8_t			lastSNR();
 
 protected:
     /// This is a low level function to handle the interrupts for one instance of RH_RF95.

@@ -4,7 +4,6 @@
 #include <stdint.h>
 #include <base64.h>
 #include <RH_RF95.h>
-#include <RHSPIDriver.h>
 #include "tCAN.h"
 #include "lora.h"
 
@@ -118,6 +117,7 @@ void sendFrame(tCAN *tc, RH_RF95 *rf95) {
 uint8_t recvFrame(tCAN *tc, RH_RF95 *rf95) {
 	if(!_lora_initialized)
 		return 0;
+	rf95->waitPacketSent(); // Need to wait for transmissions to finish before 
 	uint8_t len = sizeof(tCAN);
 	return rf95->recv((uint8_t *) tc, &len);
 }
@@ -128,17 +128,17 @@ uint8_t getInfoFrame(tCAN *tc, RH_RF95 *rf95, uint16_t id) {
 	if(!_lora_initialized)
 		return 0;
 	
-	uint8_t snr = rf95->lastSNR();
+	uint8_t snr = rf95->spiRead(RH_RF95_REG_19_PKT_SNR_VALUE);
 	int8_t rssi = rf95->lastRssi();
 	static uint32_t tick = 0;
 	
 	tc->id = id & 0x7FF;
 	tc->ide = 0;
 	tc->header = {0,0,8};
-	tc->data[0] = snr;
-	tc->data[1] = rssi < 0;
-	tc->data[2] = rssi < 0 ? -1*rssi : rssi;
-	tc->data[3] = 0;
+	tc->data[0] = snr < 0;
+	tc->data[1] = snr < 0 ? -1*snr : snr;
+	tc->data[2] = rssi < 0;
+	tc->data[3] = rssi < 0 ? -1*rssi : rssi;
 	tc->data[4] = tick >> 24;
 	tc->data[5] = (tick >> 16) & 0xFF;
 	tc->data[6] = (tick >> 8) & 0xFF;

@@ -1,3 +1,8 @@
+// Need this to appease the compiler gods. If The code fails to compile
+// with more unholy errors in the future referrring to this function, 
+// maybe comment it out?
+void send_canmsg(char *buf) __attribute__((__optimize__("O2")));
+
 #include <RH_RF95.h>
 #include <Base64.h>
 #include <lora.h>
@@ -264,7 +269,7 @@ void loop() {
   xfer_can2tty();
   xfer_tty2can();
   
-  if(millis() - INFO_SEND_MILLIS >= lastInfo) {
+  if(millis() >= lastInfo + INFO_SEND_MILLIS) {
     tCAN infoMsg;
     if(getInfoFrame(&infoMsg, &rf95, INFO_FRAME_RECIEVER_ID)) {
       char buf[CMD_LEN];

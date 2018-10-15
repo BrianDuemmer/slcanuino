@@ -13,7 +13,7 @@
 // Need to calibrate these to optimal data rate / transmission range.
 // Calculated based off the RF95 datasheet in combination with the
 // calculator at http://www.rfwireless-world.com/calculators/LoRa-Data-Rate-Calculator.html
-#define LORA_FREQUENCY 912.5
+#define LORA_FREQUENCY 900
 #define LORA_SPREAD_FACTOR 8
 #define LORA_BANDWIDTH 500000
 #define LORA_CODE_RATE 1

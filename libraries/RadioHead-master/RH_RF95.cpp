@@ -458,7 +458,7 @@ void RH_RF95::setPreambleLength(uint16_t bytes)
 }
 
 
-int RH_RF95::lastSNR() {
+/*int8_t RH_RF95::lastSNR() {
 	return spiRead(RH_RF95_REG_19_PKT_SNR_VALUE);
-}
+}*/
 

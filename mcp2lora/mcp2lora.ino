@@ -53,7 +53,7 @@ void loop() {
   if(recvFrame(&tc, &rf95) && ALLOW_XMIT_FROM_LORA) // We got a frame in
     writeMcp(&tc);
 
-  if(millis()-INFO_SEND_MILLIS >= lastInfo) {
+  if(millis() >= lastInfo + INFO_SEND_MILLIS) {
     if(getInfoFrame(&tcInfo, &rf95, INFO_FRAME_SENDER_ID)) {
   
       // Send the info frame both here and the socketcan client
