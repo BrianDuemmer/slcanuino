@@ -5,6 +5,8 @@
 #include "tCAN.h"
 #include <RH_RF95.h>
 
+// Need to assert this pin as output to force the 2560 into SPI master mode
+#define SPI_PIN_ASSERT 10
 
 #define LORA_PIN_NSS 5
 #define LORA_PIN_INT 2
@@ -20,7 +22,7 @@
 #define LORA_TX_POWER 23
 #define LORA_PREAMBLE 12
 
-#define INFO_ID_BASE 990 			// Base ID for all info packets used for diagnostic about the connection
+#define INFO_ID_BASE 0x7F 			// Base ID for all info packets used for diagnostic about the connection
 
 #define SEND_INFO_FRAME 1			// If true, sends a frame with connection metrics periodically
 #define INFO_SEND_MILLIS 1000 		// The time between connection packets getting sent

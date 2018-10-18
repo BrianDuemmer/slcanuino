@@ -7,10 +7,21 @@ void send_canmsg(char *buf) __attribute__((__optimize__("O2")));
 #include <Base64.h>
 #include <lora.h>
 
+// the CANdapter software will initially poll all COM ports
+// at 9600 baud and check that it responds correctly to a version
+// ("V\r") command, which should return something of the form
+// "Vxxxxxx", where x can be any digit. It then will shift
+// to a much higher baud for operation. While the real
+// CANdapter probably has the capability to conform to baud shifts
+// considering it worked from a terminal emulator at 115200, but
+// Arduino doesn't, so we must set our baud manually. Hopefully
+// they don't change this constant
+#define INITIAL_BAUD 9600
+#define RUNNING_BAUD 921600
+
 #define LED_OPEN 13
 #define LED_ERR 7
 #define CMD_LEN (sizeof("T12345678811223344556677881234\r")+1)
-#define SPI_PIN_ASSERT 10
 
 
 // int g_can_speed = CANSPEED_500; // default: 500k
@@ -28,8 +39,9 @@ void setup() {
   // need to assert the output of this pin so the arduino will work in SPI master mode
   pinMode(SPI_PIN_ASSERT, OUTPUT);
   digitalWrite(SPI_PIN_ASSERT, 1);
+
   
-  Serial.begin(115200); // select from 115200,500000,1000000
+  Serial.begin(INITIAL_BAUD);
   if (initLora(&rf95)) {
     digitalWrite(LED_OPEN, HIGH);
     digitalWrite(LED_ERR, LOW);
@@ -150,10 +162,16 @@ void pars_slcancmd(char *buf)
       }
       slcan_ack();
       break;
-    case 'C': // close channel
+    case 'C': // close channel. Must reset baud!
       digitalWrite(LED_OPEN, LOW);
       digitalWrite(LED_ERR, LOW);
       slcan_ack();
+      
+      Serial.flush();
+      Serial.begin(INITIAL_BAUD);
+      while(!Serial)
+        ;
+        
       resetLora(&rf95);
       break;
     case 't': // SFF
@@ -224,12 +242,16 @@ void pars_slcancmd(char *buf)
       Serial.print("F12");
       slcan_ack();
       break;
-    case 'V': // hw/sw version
-      Serial.print("V1234");
+    case 'V': // hw/sw version. When we get this, gotta shift baud to play nice with the CANdapter software
+      Serial.print("V690420");
       slcan_ack();
+      Serial.flush();
+      Serial.begin(RUNNING_BAUD);
+      while(!Serial)
+        ;
       break;
     case 'N': // serial number
-      Serial.print("N1234");
+      Serial.print("N1337");
       slcan_ack();
       break;
     default: // unknown command

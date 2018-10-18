@@ -3,7 +3,7 @@
 #include <mcp_can.h>
 #include <lora.h>
 
-#define SPI_PIN_ASSERT 10
+#define CAN_SPEED CAN_1000KBPS
 
 #define MCP_PIN_INT 3
 #define MCP_PIN_NSS 10
@@ -29,7 +29,7 @@ void setup() {
   pinMode(LORA_PIN_RESET, OUTPUT);
   digitalWrite(LORA_PIN_RESET, 1);
   
-  while (CAN_OK != mcp.begin(CAN_500KBPS))              // init can bus : baudrate = 500k
+  while (CAN_OK != mcp.begin(CAN_SPEED))              // init can bus : baudrate = 500k
   {
       Serial.println("CAN BUS Shield init fail");
       Serial.println(" Init CAN BUS Shield again");
